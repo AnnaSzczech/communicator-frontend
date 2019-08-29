@@ -2,6 +2,7 @@ package com.crud.communicator.client;
 
 import com.crud.communicator.domain.AccountDto;
 import com.crud.communicator.domain.LoginDto;
+import com.vaadin.flow.component.notification.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpClientErrorException;
@@ -38,5 +39,10 @@ public class CommunicatorClient {
         URI uri = UriComponentsBuilder.fromHttpUrl(endpoint + login)
                 .build().encode().toUri();
         restTemplate.delete(uri);
+    }
+
+    public void showMessage(String message){
+        CommunicatorClient.LOGGER.error(message);
+        Notification.show(message).setPosition(Notification.Position.MIDDLE);
     }
 }
