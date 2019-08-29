@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -22,21 +23,27 @@ public class LoginForm extends FormLayout {
     private TextField password = new TextField("password");
 
     private Button signIn = new Button("Sign in");
+    private Button signUp = new Button("Sign up");
     private Binder<LoginDto> binder = new Binder<>(LoginDto.class);
     private MainView mainView;
 
     private LoginDto loginDto = new LoginDto();
 
     public LoginForm(final MainView mainView){
-
         this.mainView = mainView;
         Label header = new Label("LOG IN");
-        VerticalLayout verticalLayout = new VerticalLayout(header, login, password, signIn);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(signIn, signUp);
+        VerticalLayout verticalLayout = new VerticalLayout(header, login, password, horizontalLayout);
         add(verticalLayout);
         binder.bindInstanceFields(this);
         binder.setBean(loginDto);
         login.focus();
         signIn.addClickListener(event -> logIn());
+        signUp.addClickListener(event -> signUp());
+    }
+
+    private void signUp() {
+        mainView.setVisibleOnNewAccountForm(true);
     }
 
     private void logIn(){
