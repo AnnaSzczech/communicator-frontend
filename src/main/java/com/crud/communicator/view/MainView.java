@@ -1,10 +1,9 @@
 package com.crud.communicator.view;
 
-import com.crud.communicator.view.form.Communicator;
+import com.crud.communicator.view.communicator.Communicator;
 import com.crud.communicator.view.form.LoginForm;
 import com.crud.communicator.view.form.NewAccountForm;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;

@@ -1,6 +1,6 @@
 package com.crud.communicator.view.form;
 
-import com.crud.communicator.client.CommunicatorClient;
+import com.crud.communicator.client.AccountClient;
 import com.crud.communicator.domain.LoginDto;
 import com.crud.communicator.factory.LabelFactory;
 import com.crud.communicator.view.MainView;
@@ -8,7 +8,6 @@ import com.crud.communicator.view.confirmation.ConfirmationDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,7 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 @Route
 public class LoginForm extends FormLayout {
 
-    private CommunicatorClient communicatorClient = new CommunicatorClient();
+    private AccountClient accountClient = new AccountClient();
 
     private TextField login = new TextField("login");
     private PasswordField password = new PasswordField("password");
@@ -61,12 +60,12 @@ public class LoginForm extends FormLayout {
     private void logIn() {
         LoginDto login = binder.getBean();
         try {
-            communicatorClient.logIn(login);
+            accountClient.logIn(login);
             mainView.setVisibleOnCommunicator(true);
             mainView.setLogger(login.getLogin());
         } catch (HttpClientErrorException e) {
             String message = "LOGIN OR PASSWORD IS INCORRECT!";
-            communicatorClient.showMessage(message);
+            accountClient.showMessage(message);
         }
     }
 }

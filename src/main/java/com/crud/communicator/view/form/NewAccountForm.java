@@ -1,15 +1,15 @@
 package com.crud.communicator.view.form;
 
-import com.crud.communicator.client.CommunicatorClient;
+import com.crud.communicator.client.AccountClient;
 import com.crud.communicator.domain.AccountDto;
 import com.crud.communicator.factory.LabelFactory;
 import com.crud.communicator.view.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
@@ -23,13 +23,13 @@ public class NewAccountForm extends FormLayout {
 
     private TextField name = new TextField("name");
     private TextField surname = new TextField("surname");
-    private TextField email = new TextField("email");
+    private EmailField email = new EmailField("email");
     private TextField login = new TextField("login");
     private TextField password = new TextField("password");
 
     private Binder<AccountDto> binder = new Binder<>(AccountDto.class);
     private AccountDto accountDto = new AccountDto();
-    private CommunicatorClient communicatorClient = new CommunicatorClient();
+    private AccountClient accountClient = new AccountClient();
 
     public NewAccountForm(final MainView mainView) {
         setVisible(false);
@@ -63,11 +63,11 @@ public class NewAccountForm extends FormLayout {
         mainView.setVisibleOnLoginForm(true);
         AccountDto account = binder.getBean();
         try {
-            communicatorClient.createNewAccount(account);
+            accountClient.createNewAccount(account);
             setVisible(false);
         } catch (HttpClientErrorException e) {
             String message = "LOGIN OR EMAIL IS NOT UNIQUE!";
-            communicatorClient.showMessage(message);
+            accountClient.showMessage(message);
         }
     }
 }
