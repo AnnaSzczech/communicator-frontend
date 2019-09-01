@@ -1,6 +1,5 @@
-package com.crud.communicator.view.confirmation;
+package com.crud.communicator.view.dialog;
 
-import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;

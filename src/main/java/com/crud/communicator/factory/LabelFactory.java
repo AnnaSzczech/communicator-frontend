@@ -6,6 +6,8 @@ import com.vaadin.flow.component.html.Label;
 public final class LabelFactory {
     public static final String HEADER = "HEADER";
     public static final String SMALL_HEADER = "SMALL_HEADER";
+    public static final String TEXT_BOLD = "TEXT_BOLD";
+    public static final String TEXT_GRAY = "TEXT_GRAY";
 
     public final Label makeLabel(String label, String text) {
         switch (label) {
@@ -13,9 +15,31 @@ public final class LabelFactory {
                 return createHeader(text);
             case SMALL_HEADER:
                 return createSmallHeader(text);
+            case TEXT_BOLD:
+                return createTextBold(text);
+            case TEXT_GRAY:
+                return createTextGray(text);
             default:
                 return null;
         }
+    }
+
+    private Label createTextGray(String text) {
+        Label textGray = new Label(text);
+        textGray.getStyle().set("color", "#D0D0D0");
+        textGray.getStyle().set("font-size", "10px");
+        textGray.getStyle().set("font-style", "italic");
+        textGray.getStyle().set("text-align", "left");
+        return textGray;
+    }
+
+    private Label createTextBold(String text) {
+        Label textBold = new Label(text);
+        textBold.getStyle().set("color", "black");
+        textBold.getStyle().set("font-weight", "bold");
+        textBold.getStyle().set("font-size", "12px");
+        textBold.getStyle().set("text-align", "left");
+        return textBold;
     }
 
     private Label createSmallHeader(String text) {

@@ -4,10 +4,13 @@ import com.crud.communicator.client.AccountClient;
 import com.crud.communicator.domain.AccountDto;
 import com.crud.communicator.factory.LabelFactory;
 import com.crud.communicator.view.MainView;
+import com.crud.communicator.view.component.ComponentLook;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -17,6 +20,9 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @Route
 public class NewAccountForm extends FormLayout {
+
+
+    private ComponentLook componentLook = new ComponentLook(this);
 
     private MainView mainView;
     private Button save = new Button("Create account");
@@ -32,11 +38,28 @@ public class NewAccountForm extends FormLayout {
     private AccountClient accountClient = new AccountClient();
 
     public NewAccountForm(final MainView mainView) {
+        createCloseButton();
         setVisible(false);
         this.mainView = mainView;
         createForm();
         createBinder();
-        setBackground("white");
+        componentLook.setComponentLook("260px", "680px", "white", true);
+
+    }
+
+    private void createCloseButton() {
+        Button close = new Button();
+        close.setIcon(VaadinIcon.CLOSE.create());
+        close.addClickListener(event -> close());
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.add(close);
+        horizontalLayout.setAlignItems(FlexComponent.Alignment.END);
+        add(close);
+    }
+
+    private void close(){
+        mainView.setVisibleOnLoginForm(true);
+        clear();
     }
 
     private void createForm() {
@@ -54,10 +77,6 @@ public class NewAccountForm extends FormLayout {
         binder.setBean(accountDto);
     }
 
-    private void setBackground(String color){
-        getStyle().set("background-color", color);
-    }
-
 
     private void save() {
         mainView.setVisibleOnLoginForm(true);
@@ -65,9 +84,18 @@ public class NewAccountForm extends FormLayout {
         try {
             accountClient.createNewAccount(account);
             setVisible(false);
+            clear();
         } catch (HttpClientErrorException e) {
             String message = "LOGIN OR EMAIL IS NOT UNIQUE!";
             accountClient.showMessage(message);
         }
+    }
+
+    public void clear(){
+        name.clear();
+        surname.clear();
+        email.clear();
+        login.clear();
+        password.clear();
     }
 }

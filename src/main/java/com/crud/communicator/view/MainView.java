@@ -23,6 +23,7 @@ public class MainView extends VerticalLayout {
         gap.setWidthFull();
         add(gap);
         HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.setSizeFull();
         horizontalLayout.add(loginForm, communicator, newAccountForm);
         horizontalLayout.getStyle().set("margin-left", "auto");
         horizontalLayout.getStyle().set("margin-right", "auto");
@@ -30,6 +31,7 @@ public class MainView extends VerticalLayout {
         add(horizontalLayout);
         setSizeFull();
         getStyle().set("background-color", "#EEEEEE");
+//        setSpacing(false);
 
     }
 

@@ -4,7 +4,8 @@ import com.crud.communicator.client.AccountClient;
 import com.crud.communicator.domain.LoginDto;
 import com.crud.communicator.factory.LabelFactory;
 import com.crud.communicator.view.MainView;
-import com.crud.communicator.view.confirmation.ConfirmationDialog;
+import com.crud.communicator.view.component.ComponentLook;
+import com.crud.communicator.view.dialog.ConfirmationDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
@@ -21,6 +22,7 @@ import org.springframework.web.client.HttpClientErrorException;
 public class LoginForm extends FormLayout {
 
     private AccountClient accountClient = new AccountClient();
+    private ComponentLook componentLook = new ComponentLook(this);
 
     private TextField login = new TextField("login");
     private PasswordField password = new PasswordField("password");
@@ -34,7 +36,7 @@ public class LoginForm extends FormLayout {
 
     public LoginForm(final MainView mainView) {
         this.mainView = mainView;
-
+        componentLook.setComponentLook("250px", "350px", "white",true);
         HorizontalLayout horizontalLayout = new HorizontalLayout(signIn, signUp);
         LabelFactory labelFactory = new LabelFactory();
         Label header = labelFactory.makeLabel(LabelFactory.HEADER, "LOG IN");
@@ -46,7 +48,6 @@ public class LoginForm extends FormLayout {
         login.focus();
         signIn.addClickListener(event -> logIn());
         signUp.addClickListener(event -> signUp());
-        getStyle().set("background-color", "white");
     }
 
 
@@ -63,9 +64,15 @@ public class LoginForm extends FormLayout {
             accountClient.logIn(login);
             mainView.setVisibleOnCommunicator(true);
             mainView.setLogger(login.getLogin());
+            clear();
         } catch (HttpClientErrorException e) {
             String message = "LOGIN OR PASSWORD IS INCORRECT!";
             accountClient.showMessage(message);
         }
+    }
+
+    public void clear(){
+        login.clear();
+        password.clear();
     }
 }
