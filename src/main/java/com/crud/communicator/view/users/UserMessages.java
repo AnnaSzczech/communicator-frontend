@@ -10,7 +10,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.listbox.ListBox;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -28,15 +27,24 @@ public class UserMessages extends VerticalLayout {
     private ListBox<MessageDto> messages;
     private TextField newMessage;
     private Button send;
+    private Button loveCalculator;
 
     public UserMessages(){
+        createLoveCalculatorButton();
         this.messages = createMessagesList();
         add(messages);
         messages.getItemEnabledProvider();
         createTextingField();
-
         setSpacing(false);
 
+    }
+
+    private void createLoveCalculatorButton() {
+        loveCalculator = new Button("LOVE CALCULATOR!");
+        ComponentLook componentLook = new ComponentLook(loveCalculator);
+        componentLook.setComponentLook("200px", "50px", "blue", false);
+        loveCalculator.getStyle().set("color", "white");
+        add(loveCalculator);
     }
 
     private ListBox<MessageDto> createMessagesList() {
@@ -84,8 +92,6 @@ public class UserMessages extends VerticalLayout {
         componentLook.setComponentLook("50px", "38px", "blue", false);
         icon.setColor("white");
         send.setIcon(icon);
-//        send.getStyle().set("background-color", "blue");
-//        send.setWidth("50px");
     }
 
     public Button getSend() {
@@ -94,5 +100,9 @@ public class UserMessages extends VerticalLayout {
 
     public TextField getNewMessage() {
         return newMessage;
+    }
+
+    public Button getLoveCalculator(){
+        return loveCalculator;
     }
 }

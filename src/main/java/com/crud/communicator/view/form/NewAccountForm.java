@@ -1,6 +1,7 @@
 package com.crud.communicator.view.form;
 
 import com.crud.communicator.client.AccountClient;
+import com.crud.communicator.client.EmailValidator;
 import com.crud.communicator.domain.AccountDto;
 import com.crud.communicator.factory.LabelFactory;
 import com.crud.communicator.view.MainView;
@@ -9,6 +10,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -79,19 +81,41 @@ public class NewAccountForm extends FormLayout {
 
 
     private void save() {
-        mainView.setVisibleOnLoginForm(true);
-        AccountDto account = binder.getBean();
-        try {
-            accountClient.createNewAccount(account);
-            setVisible(false);
-            clear();
-        } catch (HttpClientErrorException e) {
-            String message = "LOGIN OR EMAIL IS NOT UNIQUE!";
-            accountClient.showMessage(message);
+        if (isNewAccountAvailable()) {
+            if (isEmailValid()) {
+                mainView.setVisibleOnLoginForm(true);
+                AccountDto account = binder.getBean();
+                try {
+                    accountClient.createNewAccount(account);
+                    setVisible(false);
+                    clear();
+                } catch (HttpClientErrorException e) {
+                    String message = "LOGIN OR EMAIL IS NOT UNIQUE!";
+                    accountClient.showMessage(message);
+                }
+            } else {
+                Notification.show("EMAIL I INCORRECT").setPosition(Notification.Position.MIDDLE);
+            }
+        } else {
+            Notification.show("Fill missing fields").setPosition(Notification.Position.MIDDLE);
         }
     }
 
-    public void clear(){
+    private boolean isEmailValid(){
+        EmailValidator emailValidator = new EmailValidator();
+        System.out.println(email.getValue());
+        return emailValidator.verifyEmail(email.getValue()).isValid();
+    }
+
+    private boolean isNewAccountAvailable(){
+        return isMoreThanThreeLetters(name) && isMoreThanThreeLetters(surname) && isMoreThanThreeLetters(login) && isMoreThanThreeLetters(password);
+    }
+
+    private boolean isMoreThanThreeLetters(TextField textField) {
+        return textField.getValue().length() > 0;
+    }
+
+    private void clear(){
         name.clear();
         surname.clear();
         email.clear();

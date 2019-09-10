@@ -1,8 +1,6 @@
 package com.crud.communicator.client;
 
-import com.crud.communicator.domain.AccountDto;
 import com.crud.communicator.domain.MessageDto;
-import com.crud.communicator.domain.UserDto;
 import com.vaadin.flow.component.notification.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 

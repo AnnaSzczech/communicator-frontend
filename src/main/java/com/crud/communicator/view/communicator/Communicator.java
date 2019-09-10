@@ -1,6 +1,7 @@
 package com.crud.communicator.view.communicator;
 
 import com.crud.communicator.client.AccountClient;
+import com.crud.communicator.client.LoveCalculator;
 import com.crud.communicator.client.MessageClient;
 import com.crud.communicator.domain.MessageDto;
 import com.crud.communicator.view.MainView;
@@ -10,7 +11,6 @@ import com.crud.communicator.view.users.UserMessages;
 import com.crud.communicator.view.users.UserView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -18,7 +18,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.stream.Stream;
 
 @Route
 public class Communicator extends VerticalLayout {
@@ -37,13 +36,10 @@ public class Communicator extends VerticalLayout {
         setVisible(false);
         this.mainView = mainView;
         createView();
-//        setBackground("white");
     }
 
     private void createView(){
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-//        MenuBar menuBar = new MenuBar();
-//        Stream.of(logger, signOut, deleteAccount).forEach(menuBar::addItem);
         horizontalLayout.add(logger, deleteAccount, signOut);
         horizontalLayout.setSpacing(false);
         horizontalLayout.setMinWidth("1100px");
@@ -52,7 +48,6 @@ public class Communicator extends VerticalLayout {
         horizontalLayout.setAlignItems(FlexComponent.Alignment.END);
         horizontalLayout.setFlexGrow(1, logger);
         add(horizontalLayout);
-//        add(menuBar);
         signOut.addClickListener(event -> logOut());
         signOut.setMinWidth("150px");
         deleteAccount.addClickListener(event -> confirmAccountDeletion());
@@ -61,6 +56,7 @@ public class Communicator extends VerticalLayout {
         HorizontalLayout horizontal = new HorizontalLayout();
         userView.getUsers().addValueChangeListener(event -> refresh());
         userMessages.getSend().addClickListener(event -> sendMessage());
+        userMessages.getLoveCalculator().addClickListener(event -> checkLoveCalculator());
         horizontal.add(userView, userMessages);
         horizontal.setSizeFull();
         add(horizontal);
@@ -70,9 +66,6 @@ public class Communicator extends VerticalLayout {
         setSpacing(false);
     }
 
-    private void setBackground(String color){
-        getStyle().set("background-color", color);
-    }
 
     private void confirmAccountDeletion(){
         ConfirmationDialog confirm = new ConfirmationDialog("Confirm", "Are you sure that you want to delete this account?",
@@ -127,7 +120,20 @@ public class Communicator extends VerticalLayout {
             messageClient.createMessage(messageDto);
             refresh();
         } else {
-            Notification.show("SELECT THE USER").setPosition(Notification.Position.MIDDLE);
+            showMessage("SELECT THE USER");
         }
+    }
+
+    private void checkLoveCalculator(){
+        if (userView.getSelectedUser() != null) {
+            LoveCalculator loveCalculator = new LoveCalculator();
+            showMessage(loveCalculator.getPercentage(logger.getText(), userView.getSelectedUser().getLogin()).toString());
+        } else {
+            showMessage("SELECT THE USER");
+        }
+    }
+
+    private void showMessage(String message){
+        Notification.show(message).setPosition(Notification.Position.MIDDLE);
     }
 }
